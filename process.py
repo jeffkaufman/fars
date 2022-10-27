@@ -17,14 +17,14 @@ def bucket_age(age):
     return "0-2"
 
 def start():
-    fatalities = defaultdict(int) 
-    fatalities_oct31 = defaultdict(int) 
-    fatalities_apr30 = defaultdict(int) 
+    fatalities = defaultdict(int)
+    fatalities_oct31 = defaultdict(int)
+    fatalities_apr30 = defaultdict(int)
 
     apr30_by_year = defaultdict(int)
-    
+
     daily_child_fatalities = defaultdict(int)
-    
+
     for person_csv in sorted(glob.glob("*/person.csv")):
         year = person_csv.split("/")[0]
 
@@ -33,7 +33,7 @@ def start():
 
         if False and (year < "1990" or year > "2010"):
             continue # replicate the chart
-        
+
         with open(person_csv) as inf:
             for lineno, row in enumerate(csv.reader(inf)):
                 if lineno == 0:
@@ -41,12 +41,17 @@ def start():
                     i_month = row.index("MONTH")
                     i_day = row.index("DAY")
                     i_age = row.index("AGE")
+                    i_death_month = row.index("DEATH_MO")
                 else:
                     per_typ = row[i_per_typ]
 
                     if per_typ != "5":
                         continue
-                    
+
+                    death_month = row[i_death_month]
+                    if death_month == "0":
+                        continue
+
                     month = int(row[i_month])
                     day = int(row[i_day])
                     age = int(row[i_age])
@@ -55,10 +60,11 @@ def start():
                     if day == 99: continue
                     if age > 900: continue
 
+
                     #if age <= 18:
                     if 1 < age < 11:
                         daily_child_fatalities[month, day] += 1
-                    
+
                     age = bucket_age(age)
 
                     fatalities[age] += 1
@@ -70,8 +76,6 @@ def start():
                             apr30_by_year[year] += 1
                             #if year == "1992":
                             #    print (row)
-                    
-
 
     if True:
         print("<tr><th>Age<th>N<th>Relative Risk")
