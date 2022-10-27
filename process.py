@@ -14,7 +14,7 @@ def bucket_age(age):
     if age >= 10: return "10-14"
     if age >= 6: return "6-9"
     if age >= 3: return "3-5"
-    return "0-1"
+    return "0-2"
 
 def start():
     fatalities = defaultdict(int) 
