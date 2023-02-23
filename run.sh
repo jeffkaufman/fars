@@ -9,3 +9,4 @@ for year in $(seq 1975 2020) ; do
 done
 
 ./halloween-process.py
+./somerville-process.py
